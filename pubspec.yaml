@@ -22,4 +22,24 @@ flutter:
 
   assets:
     - lib/assets/harrypotter.jpg
+    - lib/assets/harry.jpg
+    - lib/assets/animais.jpg
+    - lib/assets/banco.jpg
+    - lib/assets/casas.jpg
+    - lib/assets/cofre.jpg
+    - lib/assets/coruja.jpg
+    - lib/assets/diretor.jpg
+    - lib/assets/dobby.jpg
+    - lib/assets/feitico.jpg
+    - lib/assets/harry-quadri.jpg
+    - lib/assets/Horcruxes.jpg
+    - lib/assets/levitar.jpg
+    - lib/assets/mae.jpg
+    - lib/assets/morto.jpg
+    - lib/assets/padrinho.jpg
+    - lib/assets/plataforma.jpg
+    - lib/assets/patrono.jpg
+    - lib/assets/quadribol.jpg
+    - lib/assets/trouxas.jpg
+    - lib/assets/varinha.jpg
 

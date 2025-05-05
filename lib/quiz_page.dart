@@ -31,7 +31,6 @@ class _QuizPageState extends State<QuizPage> {
           timeLeft--;
         } else {
           timer.cancel();
-          // Tempo esgotado, avançar para próxima pergunta
           goToNextQuestion();
         }
       });
@@ -46,13 +45,11 @@ class _QuizPageState extends State<QuizPage> {
       selectedAnswerIndex = selectedIndex;
       timer.cancel();
 
-      // Verificar se a resposta está correta
       if (selectedIndex == questions[currentQuestionIndex].correctAnswerIndex) {
         score++;
       }
     });
 
-    // Aguardar um momento para mostrar a resposta correta antes de avançar
     Future.delayed(const Duration(milliseconds: 1500), () {
       goToNextQuestion();
     });
@@ -68,7 +65,6 @@ class _QuizPageState extends State<QuizPage> {
       });
       startTimer();
     } else {
-      // Quiz finalizado
       timer.cancel();
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
@@ -93,316 +89,135 @@ class _QuizPageState extends State<QuizPage> {
     final isDesktop = MediaQuery.of(context).size.width > 600;
 
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: const AssetImage('lib/assets/harrypotter.jpg'),
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.7),
-              BlendMode.darken,
-            ),
-          ),
+      backgroundColor: const Color(0xFF1A1A40), // Cor de fundo semelhante à primeira tela
+      body: Padding(
+        padding: EdgeInsets.symmetric(
+          horizontal: isDesktop ? 40.0 : 16.0,
+          vertical: 16.0,
         ),
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: isDesktop ? 40.0 : 16.0,
-              vertical: 16.0,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Cabeçalho
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Cabeçalho
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Quiz Harry Potter",
-                      style: TextStyle(
-                        fontSize: isDesktop ? 28 : 22,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        shadows: const [
-                          Shadow(
-                            blurRadius: 8,
-                            color: Colors.black,
-                            offset: Offset(2, 2),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 18, 0, 49).withOpacity(0.8),
-                        borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: Colors.amber, width: 2),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black54,
-                            blurRadius: 4,
-                            offset: Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.timer,
-                            color: Colors.amber,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            "$timeLeft s",
-                            style: TextStyle(
-                              fontSize: isDesktop ? 20 : 18,
-                              fontWeight: FontWeight.bold,
-                              color: timeLeft > 10 ? Colors.white : Colors.red,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                Text(
+                  "Quiz Harry Potter",
+                  style: TextStyle(
+                    fontSize: isDesktop ? 28 : 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.amber.shade200,
+                    shadows: const [
+                      Shadow(
+                        blurRadius: 8,
+                        color: Colors.black,
+                        offset: Offset(2, 2),
+                      )
+                    ],
+                  ),
                 ),
-                
-                const SizedBox(height: 16),
-                
-                // Indicador de progresso
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Pergunta ${currentQuestionIndex + 1} de ${questions.length}",
-                          style: TextStyle(
-                            fontSize: isDesktop ? 18 : 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            shadows: const [
-                              Shadow(
-                                blurRadius: 4,
-                                color: Colors.black,
-                                offset: Offset(1, 1),
-                              )
-                            ],
-                          ),
-                        ),
-                        Text(
-                          "Pontuação: $score",
-                          style: const TextStyle(
-                            fontSize: 16,
-                            color: Colors.amber,
-                            fontWeight: FontWeight.bold,
-                            shadows: [
-                              Shadow(
-                                blurRadius: 4,
-                                color: Colors.black,
-                                offset: Offset(1, 1),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    
-                    const SizedBox(height: 8),
-                    
-                    // Barra de progresso
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: LinearProgressIndicator(
-                        value: (currentQuestionIndex + 1) / questions.length,
-                        backgroundColor: Colors.grey[800],
-                        valueColor: const AlwaysStoppedAnimation<Color>(Colors.amber),
-                        minHeight: 8,
-                      ),
-                    ),
-                  ],
-                ),
-                
-                SizedBox(height: isDesktop ? 40 : 24),
-                
-                // Pergunta
                 Container(
-                  padding: EdgeInsets.all(isDesktop ? 24 : 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        const Color.fromARGB(255, 18, 0, 49).withOpacity(0.9),
-                        Colors.black.withOpacity(0.7),
-                      ],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(
-                      color: Colors.amber.withOpacity(0.5),
-                      width: 1,
-                    ),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black45,
-                        blurRadius: 10,
-                        offset: Offset(0, 4),
+                    color: Colors.black.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: Colors.amber, width: 2),
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(
+                        Icons.timer,
+                        color: Colors.amber,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        "$timeLeft s",
+                        style: TextStyle(
+                          fontSize: isDesktop ? 20 : 18,
+                          fontWeight: FontWeight.bold,
+                          color: timeLeft > 10 ? Colors.white : Colors.red,
+                        ),
                       ),
                     ],
                   ),
-                  child: Text(
-                    question.questionText,
-                    style: TextStyle(
-                      fontSize: isDesktop ? 26 : 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      height: 1.3,
-                      shadows: const [
-                        Shadow(
-                          blurRadius: 4,
-                          color: Colors.black,
-                          offset: Offset(1, 1),
-                        )
-                      ],
-                    ),
-                    textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            // Imagem centralizada
+            Center(
+              child: Container(
+                height: 180, // Aumentei o tamanho da imagem
+                width: 180,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  image: DecorationImage(
+                    image: AssetImage(question.imagePath),
+                    fit: BoxFit.cover,
+                  ),
+                  border: Border.all(color: Colors.amber, width: 2),
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Pergunta
+            Center(
+              child: Container(
+                width: isDesktop ? 600 : 300, // Diminuí a largura da pergunta
+                padding: EdgeInsets.all(isDesktop ? 24 : 16),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.8),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: Colors.amber.withOpacity(0.5),
+                    width: 1,
                   ),
                 ),
-                
-                SizedBox(height: isDesktop ? 32 : 20),
-                
-                // Opções de resposta
-                Expanded(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      return SingleChildScrollView(
-                        child: Center(
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              maxWidth: isDesktop ? 600 : double.infinity,
+                child: Text(
+                  question.questionText,
+                  style: TextStyle(
+                    fontSize: isDesktop ? 24 : 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    height: 1.3,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Opções de resposta
+            Expanded(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: isDesktop ? 600 : 300, // Diminuí a largura dos botões
+                  ),
+                  child: ListView.builder(
+                    itemCount: question.options.length,
+                    itemBuilder: (context, index) {
+                      final isCorrect = index == question.correctAnswerIndex;
+                      final isSelected = index == selectedAnswerIndex;
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: isSelected
+                                ? (isCorrect ? Colors.green : Colors.red)
+                                : Colors.black.withOpacity(0.7),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: List.generate(
-                                question.options.length,
-                                (index) {
-                                  final isCorrect = index == question.correctAnswerIndex;
-                                  final isSelected = index == selectedAnswerIndex;
-                                  final isIncorrectSelection = answerSelected && isSelected && !isCorrect;
-                                  final showAsCorrect = answerSelected && isCorrect;
-                                  
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                                    child: MouseRegion(
-                                      cursor: answerSelected 
-                                        ? SystemMouseCursors.basic 
-                                        : SystemMouseCursors.click,
-                                      child: AnimatedContainer(
-                                        duration: const Duration(milliseconds: 300),
-                                        height: isDesktop ? 65 : 60,
-                                        decoration: BoxDecoration(
-                                          gradient: LinearGradient(
-                                            colors: [
-                                              if (showAsCorrect)
-                                                Colors.green.shade700
-                                              else if (isIncorrectSelection)
-                                                Colors.red.shade700
-                                              else
-                                                const Color.fromARGB(255, 18, 0, 49),
-                                              if (showAsCorrect)
-                                                Colors.green.shade800
-                                              else if (isIncorrectSelection)
-                                                Colors.red.shade900
-                                              else
-                                                Colors.indigo.shade900,
-                                            ],
-                                            begin: Alignment.topLeft,
-                                            end: Alignment.bottomRight,
-                                          ),
-                                          borderRadius: BorderRadius.circular(12),
-                                          border: Border.all(
-                                            color: showAsCorrect
-                                                ? Colors.green.shade300
-                                                : isIncorrectSelection
-                                                    ? Colors.red.shade300
-                                                    : Colors.amber.withOpacity(0.5),
-                                            width: showAsCorrect || isIncorrectSelection ? 2 : 1,
-                                          ),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black.withOpacity(0.3),
-                                              blurRadius: 8,
-                                              spreadRadius: 1,
-                                              offset: const Offset(0, 3),
-                                            ),
-                                          ],
-                                        ),
-                                        child: InkWell(
-                                          onTap: answerSelected ? null : () => checkAnswer(index),
-                                          borderRadius: BorderRadius.circular(12),
-                                          child: Padding(
-                                            padding: const EdgeInsets.symmetric(horizontal: 20),
-                                            child: Row(
-                                              children: [
-                                                if (answerSelected)
-                                                  Icon(
-                                                    showAsCorrect
-                                                        ? Icons.check_circle
-                                                        : isIncorrectSelection
-                                                            ? Icons.cancel
-                                                            : Icons.circle_outlined,
-                                                    color: showAsCorrect
-                                                        ? Colors.green.shade100
-                                                        : isIncorrectSelection
-                                                            ? Colors.red.shade100
-                                                            : Colors.white.withOpacity(0.7),
-                                                    size: 24,
-                                                  )
-                                                else
-                                                  Container(
-                                                    width: 28,
-                                                    height: 28,
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      border: Border.all(
-                                                        color: Colors.amber,
-                                                        width: 2,
-                                                      ),
-                                                    ),
-                                                    child: Center(
-                                                      child: Text(
-                                                        String.fromCharCode(65 + index), // A, B, C, D
-                                                        style: const TextStyle(
-                                                          color: Colors.amber,
-                                                          fontWeight: FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                const SizedBox(width: 12),
-                                                Expanded(
-                                                  child: Text(
-                                                    question.options[index],
-                                                    style: TextStyle(
-                                                      fontSize: isDesktop ? 18 : 16,
-                                                      fontWeight: FontWeight.w500,
-                                                      color: showAsCorrect || isIncorrectSelection
-                                                          ? Colors.white
-                                                          : Colors.white.withOpacity(
-                                                              answerSelected ? 0.6 : 0.9),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
+                            padding: const EdgeInsets.symmetric(vertical: 8),
+                          ),
+                          onPressed: answerSelected ? null : () => checkAnswer(index),
+                          child: Text(
+                            question.options[index],
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -410,9 +225,9 @@ class _QuizPageState extends State<QuizPage> {
                     },
                   ),
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
