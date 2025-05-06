@@ -50,7 +50,8 @@ class _QuizPageState extends State<QuizPage> {
       }
     });
 
-    Future.delayed(const Duration(milliseconds: 1500), () {
+    // Aguarda 1 segundo antes de ir para a próxima pergunta
+    Future.delayed(const Duration(milliseconds: 1000), () {
       goToNextQuestion();
     });
   }
@@ -145,6 +146,14 @@ class _QuizPageState extends State<QuizPage> {
               ],
             ),
             const SizedBox(height: 16),
+            // Barra de progresso
+            LinearProgressIndicator(
+              value: (currentQuestionIndex + 1) / questions.length, // Progresso baseado no índice atual
+              backgroundColor: Colors.grey.shade800, // Cor de fundo da barra
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.amber), // Cor do progresso
+              minHeight: 8, // Altura da barra
+            ),
+            const SizedBox(height: 16),
             // Imagem centralizada
             Center(
               child: Container(
@@ -202,22 +211,60 @@ class _QuizPageState extends State<QuizPage> {
 
                       return Padding(
                         padding: const EdgeInsets.symmetric(vertical: 6.0),
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: isSelected
-                                ? (isCorrect ? Colors.green : Colors.red)
-                                : Colors.black.withOpacity(0.7),
-                            shape: RoundedRectangleBorder(
+                        child: InkWell(
+                          onTap: answerSelected ? null : () => checkAnswer(index),
+                          borderRadius: BorderRadius.circular(12),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              gradient: isSelected
+                                  ? (isCorrect
+                                      ? const LinearGradient(
+                                          colors: [Colors.green, Colors.lightGreen],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        )
+                                      : const LinearGradient(
+                                          colors: [Colors.red, Colors.redAccent],
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        ))
+                                  : const LinearGradient(
+                                      colors: [Color(0xFF1E1E2C), Color(0xFF2C2C3E)],
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                    ),
                               borderRadius: BorderRadius.circular(12),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 6,
+                                  offset: const Offset(2, 4),
+                                ),
+                              ],
+                              border: Border.all(
+                                color: isSelected
+                                    ? (isCorrect ? Colors.greenAccent : Colors.redAccent)
+                                    : Colors.amber,
+                                width: 2,
+                              ),
                             ),
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                          ),
-                          onPressed: answerSelected ? null : () => checkAnswer(index),
-                          child: Text(
-                            question.options[index],
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
+                            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+                            child: Center(
+                              child: Text(
+                                question.options[index],
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  shadows: [
+                                    Shadow(
+                                      color: Colors.black,
+                                      blurRadius: 4,
+                                      offset: Offset(1, 2),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ),

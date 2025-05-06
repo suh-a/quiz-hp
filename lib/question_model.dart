@@ -54,7 +54,7 @@ final List<Question> questions = [
     questionText: "Quem é o padrinho de Harry Potter?",
     options: ["Remo Lupin", "Albus Dumbledore", "Sirius Black", "Arthur Weasley"],
     correctAnswerIndex: 2,
-    imagePath: "lib/assets/coruja.jpg",
+    imagePath: "lib/assets/padrinho.jpg",
   ),
   Question(
     questionText: "Como é chamado o esporte bruxo jogado em vassouras?",
